@@ -1,40 +1,29 @@
 import 'package:droid_flight/pages/input/input_page.dart';
 import 'package:flutter/material.dart';
+import 'home_notifier.dart';
+import 'home_state.dart';
 
-class BetaAppData {
-  final String image;
-  final String name;
-  final String? section;
-  const BetaAppData({required this.image, required this.name, this.section});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
 }
 
-const Map<String, List<BetaAppData>> betaApps = {
-  'Your beta programs': [
-    BetaAppData(
-      image:
-          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/taskmaster.png',
-      name: 'TaskMaster',
-      section: 'Your beta programs',
-    ),
-  ],
-  'Communication': [
-    BetaAppData(
-      image:
-          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/chatterbox.png',
-      name: 'ChatterBox',
-      section: 'Communication',
-    ),
-    BetaAppData(
-      image:
-          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/connectnow.png',
-      name: 'ConnectNow',
-      section: 'Communication',
-    ),
-  ],
-};
+class _HomePageState extends State<HomePage> {
+  late final HomeNotifier _notifier;
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _notifier = HomeNotifier();
+  }
+
+  @override
+  void dispose() {
+    _notifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,38 +39,51 @@ class HomePage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: ListView.builder(
-          itemCount: _calculateTotalItems(),
-          itemBuilder: (context, index) {
-            // 0: フィルターチップ
-            if (index == 0) {
-              return Column(
-                children: [
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      _FilterChip(label: 'All', selected: true),
-                      const SizedBox(width: 12),
-                      _FilterChip(label: 'Productivity'),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              );
-            }
+      body: ValueListenableBuilder<HomeState>(
+          valueListenable: _notifier,
+          builder: (context, state, _) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ListView.builder(
+                itemCount: _calculateTotalItems(state.betaApps),
+                itemBuilder: (context, index) {
+                  // 0: フィルターチップ
+                  if (index == 0) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            _FilterChip(
+                              label: 'All',
+                              selected: state.selectedFilter == 'All',
+                              onTap: () => _notifier.updateFilter('All'),
+                            ),
+                            const SizedBox(width: 12),
+                            _FilterChip(
+                              label: 'Productivity',
+                              selected: state.selectedFilter == 'Productivity',
+                              onTap: () =>
+                                  _notifier.updateFilter('Productivity'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    );
+                  }
 
-            // カテゴリーとアプリのリストを表示
-            return _buildCategoryOrApp(index);
-          },
-        ),
-      ),
+                  // カテゴリーとアプリのリストを表示
+                  return _buildCategoryOrApp(index, state.betaApps);
+                },
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _moveToInputPage(context),
         backgroundColor: const Color(0xFF339CFF),
-        child: const Icon(Icons.add, color: Colors.white),
         shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -94,7 +96,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  int _calculateTotalItems() {
+  int _calculateTotalItems(Map<String, List<BetaAppData>> betaApps) {
     // フィルターチップ(1) + 各カテゴリーごとに (カテゴリータイトル(1) + そのカテゴリーのアプリリスト数)
     int count = 1; // フィルターチップ用
 
@@ -106,7 +108,8 @@ class HomePage extends StatelessWidget {
     return count;
   }
 
-  Widget _buildCategoryOrApp(int index) {
+  Widget _buildCategoryOrApp(
+      int index, Map<String, List<BetaAppData>> betaApps) {
     int currentIndex = 1; // フィルターチップの次から開始
 
     // 各カテゴリーを処理
@@ -143,22 +146,31 @@ class HomePage extends StatelessWidget {
 class _FilterChip extends StatelessWidget {
   final String label;
   final bool selected;
-  const _FilterChip({required this.label, this.selected = false});
+  final VoidCallback? onTap;
+
+  const _FilterChip({
+    required this.label,
+    this.selected = false,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: selected ? const Color(0xE6EAF3FF) : Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? const Color(0xE6EAF3FF) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+          ),
         ),
       ),
     );
