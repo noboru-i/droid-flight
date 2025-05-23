@@ -8,29 +8,30 @@ class BetaAppData {
   const BetaAppData({required this.image, required this.name, this.section});
 }
 
-const List<BetaAppData> yourBetaPrograms = [
-  BetaAppData(
-    image:
-        'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/taskmaster.png',
-    name: 'TaskMaster',
-    section: 'Your beta programs',
-  ),
-];
-
-const List<BetaAppData> communicationApps = [
-  BetaAppData(
-    image:
-        'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/chatterbox.png',
-    name: 'ChatterBox',
-    section: 'Communication',
-  ),
-  BetaAppData(
-    image:
-        'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/connectnow.png',
-    name: 'ConnectNow',
-    section: 'Communication',
-  ),
-];
+const Map<String, List<BetaAppData>> betaApps = {
+  'Your beta programs': [
+    BetaAppData(
+      image:
+          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/taskmaster.png',
+      name: 'TaskMaster',
+      section: 'Your beta programs',
+    ),
+  ],
+  'Communication': [
+    BetaAppData(
+      image:
+          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/chatterbox.png',
+      name: 'ChatterBox',
+      section: 'Communication',
+    ),
+    BetaAppData(
+      image:
+          'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/connectnow.png',
+      name: 'ConnectNow',
+      section: 'Communication',
+    ),
+  ],
+};
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -52,9 +53,9 @@ class HomePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListView.builder(
-          itemCount: 2 + yourBetaPrograms.length + 1 + communicationApps.length,
+          itemCount: _calculateTotalItems(),
           itemBuilder: (context, index) {
-            // 0: フィルターチップ, 1: Your beta programsタイトル, 2..: yourBetaPrograms, ...
+            // 0: フィルターチップ
             if (index == 0) {
               return Column(
                 children: [
@@ -69,30 +70,10 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 24),
                 ],
               );
-            } else if (index == 1) {
-              return const Text(
-                'Your beta programs',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              );
-            } else if (index < 2 + yourBetaPrograms.length) {
-              final app = yourBetaPrograms[index - 2];
-              return Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 32),
-                child: _BetaAppTile(image: app.image, name: app.name),
-              );
-            } else if (index == 2 + yourBetaPrograms.length) {
-              return const Text(
-                'Communication',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              );
-            } else {
-              final app =
-                  communicationApps[index - (3 + yourBetaPrograms.length)];
-              return Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 16),
-                child: _BetaAppTile(image: app.image, name: app.name),
-              );
             }
+
+            // カテゴリーとアプリのリストを表示
+            return _buildCategoryOrApp(index);
           },
         ),
       ),
@@ -111,6 +92,51 @@ class HomePage extends StatelessWidget {
         builder: (context) => const InputPage(),
       ),
     );
+  }
+
+  int _calculateTotalItems() {
+    // フィルターチップ(1) + 各カテゴリーごとに (カテゴリータイトル(1) + そのカテゴリーのアプリリスト数)
+    int count = 1; // フィルターチップ用
+
+    for (var category in betaApps.keys) {
+      count += 1; // カテゴリータイトル
+      count += betaApps[category]!.length; // そのカテゴリーのアプリ数
+    }
+
+    return count;
+  }
+
+  Widget _buildCategoryOrApp(int index) {
+    int currentIndex = 1; // フィルターチップの次から開始
+
+    // 各カテゴリーを処理
+    for (var category in betaApps.keys) {
+      // カテゴリータイトル
+      if (index == currentIndex) {
+        return Text(
+          category,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        );
+      }
+      currentIndex++;
+
+      // カテゴリー内のアプリリスト
+      final apps = betaApps[category]!;
+      for (int i = 0; i < apps.length; i++) {
+        if (index == currentIndex) {
+          final app = apps[i];
+          final bool isYourBetaProgram = category == 'Your beta programs';
+          return Padding(
+            padding:
+                EdgeInsets.only(top: 16, bottom: isYourBetaProgram ? 32 : 16),
+            child: _BetaAppTile(image: app.image, name: app.name),
+          );
+        }
+        currentIndex++;
+      }
+    }
+
+    return const SizedBox(); // インデックスが範囲外の場合
   }
 }
 
