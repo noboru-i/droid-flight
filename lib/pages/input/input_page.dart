@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:droid_flight/pages/home/home_notifier.dart';
+import 'package:droid_flight/pages/home/home_state.dart';
 
 class InputPage extends StatelessWidget {
-  const InputPage({super.key});
+  const InputPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final invitationController = TextEditingController();
+    final nameController = TextEditingController();
+    final categoryController = TextEditingController();
+    final tagsController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -27,19 +34,39 @@ class InputPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              const _InputField(hint: 'Invitation link'),
+              _InputField(
+                  hint: 'Invitation link', controller: invitationController),
               const SizedBox(height: 16),
-              const _InputField(hint: 'App name'),
+              _InputField(hint: 'App name', controller: nameController),
               const SizedBox(height: 16),
-              const _InputField(hint: 'Category'),
+              _InputField(hint: 'Category', controller: categoryController),
               const SizedBox(height: 16),
-              const _InputField(hint: 'Tags (split by comma)'),
+              _InputField(
+                  hint: 'Tags (split by comma)', controller: tagsController),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
                 height: 64,
                 child: FilledButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final notifier = HomeNotifier();
+                    final tags = tagsController.text
+                        .split(',')
+                        .map((e) => e.trim())
+                        .where((e) => e.isNotEmpty)
+                        .toList();
+                    final app = BetaAppData(
+                      applicationId: invitationController.text,
+                      image: '', // 必要に応じて画像URLを追加
+                      name: nameController.text,
+                      tags: tags,
+                      section: categoryController.text.isEmpty
+                          ? null
+                          : categoryController.text,
+                    );
+                    await notifier.addBetaApp(app);
+                    if (context.mounted) Navigator.of(context).pop();
+                  },
                   child: const Text('Join beta'),
                 ),
               ),
@@ -53,13 +80,14 @@ class InputPage extends StatelessWidget {
 }
 
 class _InputField extends StatelessWidget {
-  const _InputField({required this.hint});
-
   final String hint;
+  final TextEditingController? controller;
+  const _InputField({required this.hint, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hint,
       ),
