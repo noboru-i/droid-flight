@@ -6,61 +6,29 @@ import 'home_state.dart';
 
 class HomeNotifier extends ValueNotifier<HomeState> {
   HomeNotifier() : super(const HomeState()) {
-    _loadFromPrefs();
+    loadFromPrefs();
   }
 
-  Future<void> _loadFromPrefs() async {
+  Future<void> loadFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString('betaApps');
-    if (jsonString != null) {
-      final decoded = json.decode(jsonString) as Map<String, dynamic>;
-      final Map<String, List<BetaAppData>> loaded = {};
-      decoded.forEach((key, value) {
-        loaded[key] = (value as List)
-            .map((e) => BetaAppData(
-                  applicationId: e['applicationId'],
-                  image: e['image'],
-                  name: e['name'],
-                  tags: List<String>.from(e['tags']),
-                  section: e['section'],
-                ))
-            .toList();
-      });
-      value = value.copyWith(betaApps: loaded);
-    } else {
-      // デフォルトデータ
-      final Map<String, List<BetaAppData>> initialBetaApps = {
-        'Your beta programs': [
-          const BetaAppData(
-            applicationId: 'com.example.taskmaster',
-            image:
-                'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/taskmaster.png',
-            name: 'TaskMaster',
-            section: 'Your beta programs',
-            tags: ['productivity'],
-          ),
-        ],
-        'Communication': [
-          const BetaAppData(
-            applicationId: 'com.example.chatterbox',
-            image:
-                'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/chatterbox.png',
-            name: 'ChatterBox',
-            section: 'Communication',
-            tags: ['social', 'messaging'],
-          ),
-          const BetaAppData(
-            applicationId: 'com.example.connectnow',
-            image:
-                'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/connectnow.png',
-            name: 'ConnectNow',
-            section: 'Communication',
-            tags: ['social', 'video'],
-          ),
-        ],
-      };
-      value = value.copyWith(betaApps: initialBetaApps);
+    if (jsonString == null) {
+      return; // No data to load
     }
+    final decoded = json.decode(jsonString) as Map<String, dynamic>;
+    final Map<String, List<BetaAppData>> loaded = {};
+    decoded.forEach((key, value) {
+      loaded[key] = (value as List)
+          .map((e) => BetaAppData(
+                applicationId: e['applicationId'],
+                image: e['image'],
+                name: e['name'],
+                tags: List<String>.from(e['tags']),
+                section: e['section'],
+              ))
+          .toList();
+    });
+    value = value.copyWith(betaApps: loaded);
   }
 
   void updateFilter(String filter) {

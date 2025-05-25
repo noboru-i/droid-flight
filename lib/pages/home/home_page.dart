@@ -44,6 +44,19 @@ class _HomePageState extends State<HomePage> {
       body: ValueListenableBuilder<HomeState>(
           valueListenable: _notifier,
           builder: (context, state, _) {
+            final isEmpty = state.betaApps.values.every((list) => list.isEmpty);
+            if (isEmpty) {
+              // データが空の場合、フィルターチップを表示しない
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                  child: Text(
+                    'アプリが登録されていません',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                ),
+              );
+            }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListView.builder(
@@ -90,12 +103,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _moveToInputPage(BuildContext context) {
-    Navigator.of(context).push(
+  void _moveToInputPage(BuildContext context) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const InputPage(),
       ),
     );
+    _notifier.loadFromPrefs();
   }
 
   int _calculateTotalItems(Map<String, List<BetaAppData>> betaApps) {
@@ -135,13 +149,15 @@ class _HomePageState extends State<HomePage> {
             padding:
                 EdgeInsets.only(top: 16, bottom: isYourBetaProgram ? 32 : 16),
             child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
+              onTap: () async {
+                await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) =>
                         DetailPage(applicationId: app.applicationId),
                   ),
                 );
+                // reload the notifier to reflect any changes
+                _notifier.loadFromPrefs();
               },
               child: _BetaAppTile(
                 image: app.image,
