@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:droid_flight/pages/detail/detail_page.dart';
 import 'home_notifier.dart';
 import 'home_state.dart';
+import 'package:droid_flight/components/beta_tag.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -142,7 +143,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-              child: _BetaAppTile(image: app.image, name: app.name),
+              child: _BetaAppTile(
+                image: app.image,
+                name: app.name,
+                tags: app.tags,
+              ),
             ),
           );
         }
@@ -191,7 +196,12 @@ class _FilterChip extends StatelessWidget {
 class _BetaAppTile extends StatelessWidget {
   final String image;
   final String name;
-  const _BetaAppTile({required this.image, required this.name});
+  final List<String> tags;
+  const _BetaAppTile({
+    required this.image,
+    required this.name,
+    required this.tags,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -220,18 +230,18 @@ class _BetaAppTile extends StatelessWidget {
             Text(
               name,
               style: const TextStyle(
-                fontSize: 22,
+                fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Beta',
-              style: TextStyle(
-                color: Color(0xFF7B93AF),
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            Wrap(
+              spacing: 8,
+              children: tags
+                  .map(
+                    (tag) => BetaTag(label: tag),
+                  )
+                  .toList(),
             ),
           ],
         ),
