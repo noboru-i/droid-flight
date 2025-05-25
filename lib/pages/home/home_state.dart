@@ -14,8 +14,10 @@ class HomeState with _$HomeState {
 @freezed
 class BetaAppData with _$BetaAppData {
   const factory BetaAppData({
+    required String applicationId,
     required String image,
     required String name,
+    required List<String> tags,
     String? section,
   }) = _BetaAppData;
 }

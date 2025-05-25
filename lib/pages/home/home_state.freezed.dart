@@ -176,8 +176,10 @@ abstract class _HomeState implements HomeState {
 
 /// @nodoc
 mixin _$BetaAppData {
+  String get applicationId => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  List<String> get tags => throw _privateConstructorUsedError;
   String? get section => throw _privateConstructorUsedError;
 
   /// Create a copy of BetaAppData
@@ -193,7 +195,12 @@ abstract class $BetaAppDataCopyWith<$Res> {
           BetaAppData value, $Res Function(BetaAppData) then) =
       _$BetaAppDataCopyWithImpl<$Res, BetaAppData>;
   @useResult
-  $Res call({String image, String name, String? section});
+  $Res call(
+      {String applicationId,
+      String image,
+      String name,
+      List<String> tags,
+      String? section});
 }
 
 /// @nodoc
@@ -211,11 +218,17 @@ class _$BetaAppDataCopyWithImpl<$Res, $Val extends BetaAppData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? applicationId = null,
     Object? image = null,
     Object? name = null,
+    Object? tags = null,
     Object? section = freezed,
   }) {
     return _then(_value.copyWith(
+      applicationId: null == applicationId
+          ? _value.applicationId
+          : applicationId // ignore: cast_nullable_to_non_nullable
+              as String,
       image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -224,6 +237,10 @@ class _$BetaAppDataCopyWithImpl<$Res, $Val extends BetaAppData>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      tags: null == tags
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       section: freezed == section
           ? _value.section
           : section // ignore: cast_nullable_to_non_nullable
@@ -240,7 +257,12 @@ abstract class _$$BetaAppDataImplCopyWith<$Res>
       __$$BetaAppDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String image, String name, String? section});
+  $Res call(
+      {String applicationId,
+      String image,
+      String name,
+      List<String> tags,
+      String? section});
 }
 
 /// @nodoc
@@ -256,11 +278,17 @@ class __$$BetaAppDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? applicationId = null,
     Object? image = null,
     Object? name = null,
+    Object? tags = null,
     Object? section = freezed,
   }) {
     return _then(_$BetaAppDataImpl(
+      applicationId: null == applicationId
+          ? _value.applicationId
+          : applicationId // ignore: cast_nullable_to_non_nullable
+              as String,
       image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -269,6 +297,10 @@ class __$$BetaAppDataImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      tags: null == tags
+          ? _value._tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       section: freezed == section
           ? _value.section
           : section // ignore: cast_nullable_to_non_nullable
@@ -281,18 +313,33 @@ class __$$BetaAppDataImplCopyWithImpl<$Res>
 
 class _$BetaAppDataImpl implements _BetaAppData {
   const _$BetaAppDataImpl(
-      {required this.image, required this.name, this.section});
+      {required this.applicationId,
+      required this.image,
+      required this.name,
+      required final List<String> tags,
+      this.section})
+      : _tags = tags;
 
+  @override
+  final String applicationId;
   @override
   final String image;
   @override
   final String name;
+  final List<String> _tags;
+  @override
+  List<String> get tags {
+    if (_tags is EqualUnmodifiableListView) return _tags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tags);
+  }
+
   @override
   final String? section;
 
   @override
   String toString() {
-    return 'BetaAppData(image: $image, name: $name, section: $section)';
+    return 'BetaAppData(applicationId: $applicationId, image: $image, name: $name, tags: $tags, section: $section)';
   }
 
   @override
@@ -300,13 +347,17 @@ class _$BetaAppDataImpl implements _BetaAppData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BetaAppDataImpl &&
+            (identical(other.applicationId, applicationId) ||
+                other.applicationId == applicationId) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.name, name) || other.name == name) &&
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.section, section) || other.section == section));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, image, name, section);
+  int get hashCode => Object.hash(runtimeType, applicationId, image, name,
+      const DeepCollectionEquality().hash(_tags), section);
 
   /// Create a copy of BetaAppData
   /// with the given fields replaced by the non-null parameter values.
@@ -319,14 +370,20 @@ class _$BetaAppDataImpl implements _BetaAppData {
 
 abstract class _BetaAppData implements BetaAppData {
   const factory _BetaAppData(
-      {required final String image,
+      {required final String applicationId,
+      required final String image,
       required final String name,
+      required final List<String> tags,
       final String? section}) = _$BetaAppDataImpl;
 
+  @override
+  String get applicationId;
   @override
   String get image;
   @override
   String get name;
+  @override
+  List<String> get tags;
   @override
   String? get section;
 

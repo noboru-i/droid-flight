@@ -6,32 +6,38 @@ class HomeNotifier extends ValueNotifier<HomeState> {
   HomeNotifier() : super(_initState());
 
   static HomeState _initState() {
-    const Map<String, List<BetaAppData>> initialBetaApps = {
+    final Map<String, List<BetaAppData>> initialBetaApps = {
       'Your beta programs': [
-        BetaAppData(
+        const BetaAppData(
+          applicationId: 'com.example.taskmaster',
           image:
               'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/taskmaster.png',
           name: 'TaskMaster',
           section: 'Your beta programs',
+          tags: ['productivity'],
         ),
       ],
       'Communication': [
-        BetaAppData(
+        const BetaAppData(
+          applicationId: 'com.example.chatterbox',
           image:
               'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/chatterbox.png',
           name: 'ChatterBox',
           section: 'Communication',
+          tags: ['social', 'messaging'],
         ),
-        BetaAppData(
+        const BetaAppData(
+          applicationId: 'com.example.connectnow',
           image:
               'https://raw.githubusercontent.com/noboru-i/droid-flight/main/assets/connectnow.png',
           name: 'ConnectNow',
           section: 'Communication',
+          tags: ['social', 'video'],
         ),
       ],
     };
 
-    return const HomeState(betaApps: initialBetaApps);
+    return HomeState(betaApps: initialBetaApps);
   }
 
   void updateFilter(String filter) {

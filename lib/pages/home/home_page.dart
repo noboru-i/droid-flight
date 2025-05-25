@@ -1,5 +1,6 @@
 import 'package:droid_flight/pages/input/input_page.dart';
 import 'package:flutter/material.dart';
+import 'package:droid_flight/pages/detail/detail_page.dart';
 import 'home_notifier.dart';
 import 'home_state.dart';
 
@@ -132,7 +133,17 @@ class _HomePageState extends State<HomePage> {
           return Padding(
             padding:
                 EdgeInsets.only(top: 16, bottom: isYourBetaProgram ? 32 : 16),
-            child: _BetaAppTile(image: app.image, name: app.name),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DetailPage(applicationId: app.applicationId),
+                  ),
+                );
+              },
+              child: _BetaAppTile(image: app.image, name: app.name),
+            ),
           );
         }
         currentIndex++;
