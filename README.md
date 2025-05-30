@@ -22,6 +22,6 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-## AI-Assisted Development
+## VS Code Development
 
-This project is configured with Figma MCP (Model Context Protocol) for AI-assisted design workflows. See [FIGMA_MCP_SETUP.md](FIGMA_MCP_SETUP.md) for setup instructions.
+This project is configured with VS Code settings and Figma integration for enhanced development workflows. See [FIGMA_MCP_SETUP.md](FIGMA_MCP_SETUP.md) for setup instructions.

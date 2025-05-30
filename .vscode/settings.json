@@ -1,43 +1,5 @@
 {
     "files.associations": {
         "*.json": "jsonc"
-    },
-    "json.schemas": [
-        {
-            "fileMatch": [
-                "mcp_config.json",
-                ".claude/claude_desktop_config.json"
-            ],
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "mcpServers": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                                "command": {
-                                    "type": "string"
-                                },
-                                "args": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "env": {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["command"]
-                        }
-                    }
-                },
-                "required": ["mcpServers"]
-            }
-        }
-    ]
+    }
 }

@@ -1,10 +1,10 @@
-# Figma MCP Setup
+# Figma Integration for VS Code
 
-This project is configured to use Figma Model Context Protocol (MCP) for AI-assisted design workflows.
+This project is configured to integrate with Figma for design-development workflows in VS Code.
 
-## What is MCP?
+## What is Figma Integration?
 
-Model Context Protocol (MCP) is an open standard that enables AI assistants to securely connect to external data sources and tools. The Figma MCP server allows Claude and other AI assistants to interact with Figma designs.
+This setup provides enhanced VS Code support for working with Figma designs, enabling better design-development consistency for the Droid Flight Flutter project.
 
 ## Setup Instructions
 
@@ -26,61 +26,56 @@ Model Context Protocol (MCP) is an open standard that enables AI assistants to s
    FIGMA_ACCESS_TOKEN=your_actual_token_here
    ```
 
-### 3. Install MCP Server
+### 3. VS Code Setup
 
-The Figma MCP server will be automatically installed when Claude Desktop connects. If you need to install it manually:
+The project includes VS Code-specific configurations:
 
-```bash
-npm install -g @anthropic/figma-mcp
-```
+- **Extensions**: Recommended extensions are configured in `.vscode/extensions.json`
+- **Settings**: JSON file associations and other settings are in `.vscode/settings.json`
 
-### 4. Configure Claude Desktop
-
-The configuration is already set up in `.claude/claude_desktop_config.json`. Claude Desktop will automatically use this configuration when you open this project.
+Open the project in VS Code to automatically benefit from these configurations.
 
 ## Usage
 
-Once configured, you can ask Claude to:
+With VS Code and Figma integration, you can:
 
-- Analyze Figma designs
-- Extract design tokens (colors, typography, spacing)
-- Generate Flutter code from Figma components
-- Compare designs with current implementation
-- Suggest improvements to match Figma designs
+- Use Figma designs as reference while developing Flutter UI
+- Maintain design consistency through proper environment setup
+- Access Figma tokens and design specifications
+- Ensure UI implementation matches Figma designs
 
-### Example Prompts
+### Development Workflow
 
-- "Analyze the app design in Figma and suggest improvements to our Flutter UI"
-- "Extract the color palette from our Figma design file"
-- "Generate Flutter code for the button components in our design system"
-- "Compare our current app layout with the Figma mockups"
+1. **Design Reference**: Keep Figma designs open alongside VS Code
+2. **Token Access**: Use environment variables to access Figma API when needed
+3. **Consistency Checks**: Compare implementation with Figma designs
+4. **Component Development**: Build Flutter widgets that match Figma components
 
 ## Project Integration
 
-This Flutter project (Droid Flight) is a beta app management tool. With Figma MCP, you can:
+This Flutter project (Droid Flight) is a beta app management tool. With Figma integration, you can:
 
 1. **Design Consistency**: Ensure the app matches Figma designs
-2. **Component Generation**: Generate Flutter widgets from Figma components
+2. **Component Development**: Build Flutter widgets that align with Figma components
 3. **Design System**: Maintain consistency with the design system
-4. **Rapid Prototyping**: Quickly implement new designs
+4. **Rapid Development**: Access design specifications directly in VS Code
 
 ## Files
 
-- `mcp_config.json` - MCP server configuration
-- `.claude/claude_desktop_config.json` - Claude Desktop configuration
 - `.env.example` - Environment variables template
 - `.env` - Your actual environment variables (gitignored)
+- `.vscode/settings.json` - VS Code specific settings
+- `.vscode/extensions.json` - Recommended VS Code extensions
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Token not working**: Ensure your Figma token has the correct permissions
-2. **MCP server not starting**: Check that Node.js and npm are installed
-3. **Environment variables not loaded**: Ensure `.env` file is in the project root
+2. **Environment variables not loaded**: Ensure `.env` file is in the project root
+3. **VS Code extensions not loading**: Check that recommended extensions are installed
 
 ### Getting Help
 
 - [Figma API Documentation](https://www.figma.com/developers/api)
-- [MCP Specification](https://modelcontextprotocol.io/)
-- [Claude Desktop Documentation](https://claude.ai/desktop)
+- [VS Code Flutter Documentation](https://docs.flutter.dev/development/tools/vs-code)
