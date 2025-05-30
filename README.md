@@ -1,6 +1,13 @@
 # droid_flight
 
-A new Flutter project.
+A Flutter application for managing beta app programs and distributions.
+
+## Features
+
+- Browse and manage beta app programs
+- Add new beta applications
+- View detailed app information
+- Categorize apps with tags and sections
 
 ## Getting Started
 
@@ -14,3 +21,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## AI-Assisted Development
+
+This project is configured with Figma MCP (Model Context Protocol) for AI-assisted design workflows. See [FIGMA_MCP_SETUP.md](FIGMA_MCP_SETUP.md) for setup instructions.
