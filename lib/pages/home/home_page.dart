@@ -106,10 +106,10 @@ class _HomePageState extends State<HomePage> {
   void _moveToInputPage(BuildContext context) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const InputPage(),
+        builder: (context) => InputPage(notifier: _notifier),
       ),
     );
-    _notifier.loadFromPrefs();
+    // No need to reload from prefs since we're using the same notifier instance
   }
 
   int _calculateTotalItems(Map<String, List<BetaAppData>> betaApps) {
@@ -156,8 +156,7 @@ class _HomePageState extends State<HomePage> {
                         DetailPage(applicationId: app.applicationId),
                   ),
                 );
-                // reload the notifier to reflect any changes
-                _notifier.loadFromPrefs();
+                // No need to reload - DetailPage doesn't modify data
               },
               child: _BetaAppTile(
                 image: app.image,
