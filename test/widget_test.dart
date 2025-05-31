@@ -1,30 +1,63 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:droid_flight/main.dart';
+import 'package:droid_flight/pages/home/home_notifier.dart';
+import 'package:droid_flight/pages/home/home_state.dart';
+import 'package:droid_flight/pages/detail/detail_notifier.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('HomeNotifier', () {
+    testWidgets('should initialize with empty state', (WidgetTester tester) async {
+      final notifier = HomeNotifier();
+      
+      expect(notifier.value.betaApps.isEmpty, true);
+      expect(notifier.value.selectedFilter, 'All');
+      
+      notifier.dispose();
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    testWidgets('should add beta app correctly', (WidgetTester tester) async {
+      final notifier = HomeNotifier();
+      
+      final app = BetaAppData(
+        applicationId: 'test.app.id',
+        image: 'test_image.png',
+        name: 'Test App',
+        tags: ['test', 'beta'],
+        section: 'Testing',
+      );
+      
+      await notifier.addBetaApp(app);
+      
+      expect(notifier.value.betaApps.containsKey('Testing'), true);
+      expect(notifier.value.betaApps['Testing']!.length, 1);
+      expect(notifier.value.betaApps['Testing']!.first.name, 'Test App');
+      
+      notifier.dispose();
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('should update filter correctly', (WidgetTester tester) async {
+      final notifier = HomeNotifier();
+      
+      notifier.updateFilter('Productivity');
+      
+      expect(notifier.value.selectedFilter, 'Productivity');
+      
+      notifier.dispose();
+    });
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  group('DetailNotifier', () {
+    testWidgets('should initialize with loading state', (WidgetTester tester) async {
+      final notifier = DetailNotifier(applicationId: 'test.app.id');
+      
+      expect(notifier.value.isLoading, true);
+      expect(notifier.value.app, null);
+      expect(notifier.value.error, null);
+      
+      // Wait for async initialization to complete
+      await tester.pumpAndSettle();
+      
+      notifier.dispose();
+    });
   });
 }

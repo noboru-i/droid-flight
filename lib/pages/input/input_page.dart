@@ -3,7 +3,9 @@ import 'package:droid_flight/pages/home/home_notifier.dart';
 import 'package:droid_flight/pages/home/home_state.dart';
 
 class InputPage extends StatelessWidget {
-  const InputPage({Key? key}) : super(key: key);
+  final HomeNotifier notifier;
+  
+  const InputPage({Key? key, required this.notifier}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,6 @@ class InputPage extends StatelessWidget {
                 height: 64,
                 child: FilledButton(
                   onPressed: () async {
-                    final notifier = HomeNotifier();
                     final tags = tagsController.text
                         .split(',')
                         .map((e) => e.trim())
