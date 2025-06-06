@@ -34,6 +34,8 @@ abstract class $DetailStateCopyWith<$Res> {
       _$DetailStateCopyWithImpl<$Res, DetailState>;
   @useResult
   $Res call({BetaAppData? app, bool isLoading, String? error});
+
+  $BetaAppDataCopyWith<$Res>? get app;
 }
 
 /// @nodoc
@@ -55,17 +57,34 @@ class _$DetailStateCopyWithImpl<$Res, $Val extends DetailState>
     Object? isLoading = null,
     Object? error = freezed,
   }) {
-    return _then(_$DetailStateImpl(
+    return _then(_value.copyWith(
       app: freezed == app
           ? _value.app
-          : app,
+          : app // ignore: cast_nullable_to_non_nullable
+              as BetaAppData?,
       isLoading: null == isLoading
           ? _value.isLoading
-          : isLoading,
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error
           ? _value.error
-          : error,
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
+  }
+
+  /// Create a copy of DetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BetaAppDataCopyWith<$Res>? get app {
+    if (_value.app == null) {
+      return null;
+    }
+
+    return $BetaAppDataCopyWith<$Res>(_value.app!, (value) {
+      return _then(_value.copyWith(app: value) as $Val);
+    });
   }
 }
 
@@ -78,6 +97,9 @@ abstract class _$$DetailStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({BetaAppData? app, bool isLoading, String? error});
+
+  @override
+  $BetaAppDataCopyWith<$Res>? get app;
 }
 
 /// @nodoc
@@ -100,13 +122,16 @@ class __$$DetailStateImplCopyWithImpl<$Res>
     return _then(_$DetailStateImpl(
       app: freezed == app
           ? _value.app
-          : app,
+          : app // ignore: cast_nullable_to_non_nullable
+              as BetaAppData?,
       isLoading: null == isLoading
           ? _value.isLoading
-          : isLoading,
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error
           ? _value.error
-          : error,
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -164,6 +189,9 @@ abstract class _DetailState implements DetailState {
   bool get isLoading;
   @override
   String? get error;
+
+  /// Create a copy of DetailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DetailStateImplCopyWith<_$DetailStateImpl> get copyWith =>
